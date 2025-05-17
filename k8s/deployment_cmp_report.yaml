@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmp-report-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cmp-report
+  template:
+    metadata:
+      labels:
+        app: cmp-report
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+        - name: cmp-builder-k8s
+          image: cmp-report-cmp-builder:latest
+          imagePullPolicy: Never
+          volumeMounts:
+            - mountPath: /app
+              name: cmp-directory
+          command: ["/bin/sh", "-c", "while true; do python cmp_report.py build; sleep 1800; done"]
+
+        - name: cmp-server-k8s
+          image: cmp-report-cmp-server:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8002
+          volumeMounts:
+            - mountPath: /app
+              name: cmp-directory
+          command: ["python", "cmp_report.py"]
+      volumes:
+        - name: cmp-directory
+          hostPath:
+            path: /mnt/cmp_report
+            type: DirectoryOrCreate

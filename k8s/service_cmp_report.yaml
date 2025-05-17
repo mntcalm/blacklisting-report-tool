@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cmp-report-service
+spec:
+  selector:
+    app: cmp-report
+  type: NodePort
+  ports:
+    - port: 8002        # порт внутри кластера
+      targetPort: 8002  # порт на pod
+      nodePort: 30082   # внешний порт (доступен на IP хоста)

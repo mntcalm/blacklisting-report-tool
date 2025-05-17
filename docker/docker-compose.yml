@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  cmp_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cmp_server
+    ports:
+      - "8002:8002"
+    volumes:
+      - /home/calltop/cmp_report:/app
+    restart: unless-stopped
+    command: ["python", "cmp_report.py"]
+
+  cmp_builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cmp_builder
+    volumes:
+      - /home/calltop/cmp_report:/app
+    restart: unless-stopped
+    entrypoint: /bin/sh -c "while true; do python cmp_report.py build; sleep 1800; done"

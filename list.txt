@@ -1,0 +1,6 @@
+-названиеСервера1
+207.182.151.178 email.meetemailwebtrac.info
+207.182.151.187 emaila.meetemailwebtrac.info
+-названиеСервера2
+108.170.36.158 emailc.getcontacttrac.info
+184.164.147.154 emaila.getcmp.com

@@ -3,6 +3,7 @@ import dns.reversename
 import socket
 import threading
 import sys
+import logging
 from datetime import datetime
 from flask import Flask, render_template, url_for
 
@@ -11,7 +12,13 @@ l_bl_l=open("black_lists.txt", "r")
 list_blacklists=l_bl_l.readlines()
 l_bl_l.close()
 
+# Настройка логгера (один раз в начале программы)
+logging.basicConfig(filename='cmp_report.log',
+    level=logging.INFO,
+    format='[%(asctime)s] %(levelname)s: %(message)s',
+)
 
+# формируем данные о сервере. Уникальные домены, юниты - ИП+хостнейм
 class Server_bulker(object): # class for server header
   def __init__(self, name, details, domains, units, time_check):
     self.name = name
@@ -41,7 +48,7 @@ class Bulker_unit(object): # sending unit class IP+hostname from list, rest will
         self.listings.append(bl_l)
       except:
         pass
-    threads=[] #список для потоков, ДНС запросы буду выполняться одновременно
+    threads=[] #список для потоков, ДНС запросы будут выполняться одновременно (потоки)
     for bl_l in list_blacklists:
       thread = threading.Thread(target=bl_query, args=(bl_l.rstrip("\n"),))
       threads.append(thread)
@@ -57,25 +64,25 @@ class Status_unit(object): # class for report template
   def __init__(self, server, string, color):
     self.server = server
     self.string = string
-    self.color = color      
+    self.color = color
 
-    
-    
+# старт билдера, если аргумент build
 if len(sys.argv) > 1 and sys.argv[1] == "build":
   lst=open("list.txt", "r")
   srv_list=lst.readlines()
   lst.close()
   alarm_m=""
   stor_age=[]
+  logging.info(f"builder started")
 
   for rec in srv_list:
-    if rec[0] == "-":
+    if rec[0] == "-": #с минуса начинается строка названия сервера
       srv_nam=(rec.split(" ")[0])[1:]
       srv_dtl=rec.split(" ")[1:]
       tm_ch=datetime.now().strftime("%d %B %Y %I:%M%p")
       x=Server_bulker(srv_nam, srv_dtl, [], [], tm_ch)
       stor_age.append(x)
-    elif rec[0] != "" or rec[0] != " ":
+    elif rec[0] != "" or rec[0] != " ": # рубим по пробелам, если строка не пустая
       ip_u=rec.split(" ")[0]
       hstn_u=rec.split(" ")[1].rstrip("\n")
       ip_ur=ip_u.split(".")[3] + "." + ip_u.split(".")[2] + "." + ip_u.split(".")[1] + "." + ip_u.split(".")[0]
@@ -91,18 +98,22 @@ if len(sys.argv) > 1 and sys.argv[1] == "build":
         h_f=" PTR is Ok, "
         if h_f_ip != hstn_u:
           h_f=" PTR is WRONG, "
+          logging.warning(f"{ip_u}: PTR mismatch! Got {h_f_ip}, expected {hstn_u}")
           alarm_m="ALARM! "
       except:
         h_f=" PTR is DOWN, "
+        logging.warning(f"{ip_u}: PTR is down!")
         alarm_m="ALARM! "
       try:
         ip_f_h=socket.gethostbyaddr(hstn_u)[2][0]
         ip_f=" hostname is Ok, "
         if ip_f_h != ip_u:
           ip_f=" hostname is WRONG, "
+          logging.warning(f"{hstn_u}: Hostname is wrong! Got {h_f_ip} for {hstn_u}")
           alarm_m="ALARM! "
       except:
         ip_f=" hostname is DOWN, "
+        logging.warning(f"{ip_u}: Hostname mismatch! Got {h_f_ip}, expected {hstn_u}")
         alarm_m="ALARM! "
       print(ip_u, hstn_u, ip_f, h_f, sn_sc, )
       print("-----------")
@@ -128,7 +139,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "build":
     stor_age[serv_n].domains=dmn_lst
   
   #--- here objects servers+units are feeled, start of report forming
-  
+  # формируем файл
   cmp_report=open("report.txt", "w")
   strr="Report created: " + alarm_m + str(datetime.now().strftime("%d %B %Y %I:%M%p")) + "\n"
   cmp_report.write(str(strr))
@@ -146,7 +157,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "build":
       strr=strr + "\n"
       cmp_report.write(str(strr))
   cmp_report.close()
-else:
+else:  # если не билдер, то работаем в режиме сервера
   app=Flask(__name__)
   
   @app.route("/")
