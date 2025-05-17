@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+{{ super() }}
+<div class="container">
+  <table>
+  <tr><th>Server</th><th>Domain</th><th>HTTPS status</th><tr>
+  {% for gg in contns %}
+  <tr><td> {{gg.server}} </td><td> <span style="color: {{ gg.color }};"> {{ gg.string }} </span></td><td align="middle"> <img src="https://{{gg.string}}/test2.php" onerror="this.src='static/img/fail2.png'"></td><tr>
+  {% endfor %}
+  </table>
+</div>
+{% endblock %}
