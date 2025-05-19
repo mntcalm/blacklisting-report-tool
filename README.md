@@ -108,6 +108,7 @@ kubectl apply -f k8s/service_cmp_report.yaml
 
 ### Авторы ###
 
-Автор - Mntcalm (https://github.com/mntcalm/blacklisting-report-tool.git)
+Автор - Mntcalm (Aleksandr Dotsenko)
+(https://github.com/mntcalm/blacklisting-report-tool.git)
 
 
