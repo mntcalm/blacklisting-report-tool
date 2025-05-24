@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Инструмент проверки в черных списках</title>
+  <style>
+    body { font-family: sans-serif; max-width: 900px; margin: auto; padding: 20px; line-height: 1.6; }
+    code { background: #f4f4f4; padding: 2px 4px; }
+    pre { background: #f4f4f4; padding: 10px; overflow: auto; }
+    .lang-switch { text-align: right; margin-bottom: 20px; }
+    a { color: #0366d6; }
+  </style>
+</head>
+<body>
+  <div class="lang-switch">
+    <a href="index.html"> Read in English</a>
+  </div>
+
+  <h1>Инструмент проверки в черных списках</h1>
+
+  <p>Этот инструмент проверяет доменное имя или IP-адрес по нескольким черным спискам.</p>
+
+  <h2>Использование</h2>
+  <ol>
+    <li>Установите необходимые библиотеки Python:</li>
+  </ol>
+  <pre><code>pip3 install -r requirements.txt</code></pre>
+
+  <ol start="2">
+    <li>Запустите Flask-приложение:</li>
+  </ol>
+  <pre><code>python3 blacklist.py</code></pre>
+
+  <p>Затем откройте <code>http://localhost:8002</code> в браузере.</p>
+
+  <h2>Вариант с Docker</h2>
+  <pre><code>docker build -t blacklist_report .
+docker run -d -p 8002:8002 blacklist_report</code></pre>
+
+  <h2>Используемые черные списки:</h2>
+  <ul>
+    <li>zen.spamhaus.org</li>
+    <li>dbl.spamhaus.org</li>
+    <li>multi.uribl.com</li>
+    <li>bl.spamcop.net</li>
+    <li>b.barracudacentral.org</li>
+    <li>hostkarma.junkemailfilter.com</li>
+    <li>dnsbl.sorbs.net</li>
+    <li>dnsbl-1.uceprotect.net</li>
+    <li>...</li>
+  </ul>
+
+  <h2>Лицензия</h2>
+  <p>MIT</p>
+</body>
+</html>
