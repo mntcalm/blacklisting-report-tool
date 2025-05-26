@@ -21,14 +21,20 @@
   <p>This tool checks a domain name or IP address against multiple blacklists.</p>
 
   <h2>Usage</h2>
-  <ol>
+  <ul>
     <li>Install required Python libraries:</li>
-  </ol>
+  </ul>
   <pre><code>pip3 install -r requirements.txt</code></pre>
 
-  <ol start="2">
+  <ul>
+    <li>Collect the data, checking in blacklists</li>
+  </ul>
+  <pre><code>python3 cmp_report.py build</code></pre>
+
+
+  <ul>
     <li>Start the Flask app:</li>
-  </ol>
+  </ul>
   <pre><code>python3 blacklist.py</code></pre>
 
   <p>Then open <code>http://localhost:8002</code> in your browser.</p>
@@ -36,6 +42,18 @@
   <h2>Docker version</h2>
   <pre><code>docker build -t blacklist_report .
 docker run -d -p 8002:8002 blacklist_report</code></pre>
+
+  <h2>Kubernetes, double container pod version</h2>
+  <pre><code>kubectl apply -f k8s/pod_cmp_report.yaml
+kubectl port-forward pod/server-report 8002:8002 --address 0.0.0.0
+</code></pre>
+
+  <h2>Kubernetes, deployment + service version</h2>
+  <pre><code>kubectl apply -f k8s/deployment_cmp_report.yaml
+kubectl apply -f k8s/service_cmp_report.yaml
+  </code></pre>
+
+
 
   <h2>Blacklist sources used:</h2>
   <ul>
