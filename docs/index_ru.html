@@ -19,17 +19,21 @@
   <h1>Инструмент проверки в черных списках</h1>
 
   <p>Этот инструмент проверяет доменное имя или IP-адрес по нескольким черным спискам.</p>
+  <p> <a href="https://github.com/mntcalm/blacklisting-report-tool.git">  ссылка на репозиторий</a> </p>
 
   <h2>Использование</h2>
-  <ol>
+  <ul>
     <li>Установите необходимые библиотеки Python:</li>
-  </ol>
+  </ul>
   <pre><code>pip3 install -r requirements.txt</code></pre>
-
-  <ol start="2">
+  <ul>
+    <li>Collect the data, checking in blacklists</li>
+  </ul>
+  <pre><code>python3 cmp_report.py build</code></pre>
+  <ul start="2">
     <li>Запустите Flask-приложение:</li>
-  </ol>
-  <pre><code>python3 blacklist.py</code></pre>
+  </ul>
+  <pre><code>python3 cmp_report.py &</code></pre>
 
   <p>Затем откройте <code>http://localhost:8002</code> в браузере.</p>
 
