@@ -2,7 +2,7 @@
 multithread checking IPs on blacklists, HTML-report, 2 modes of script activity (builder and server)
 
 URL: https://github.com/mntcalm/blacklisting-report-tool.git
-
+docs: https://mntcalm.github.io/blacklisting-report-tool/index.html
 > Многофункциональный инструмент для проверки IP-адресов и доменов на попадание в DNS-блэклисты и доступность HTTPS. Поддерживает работу как в виде скрипта, так и в Docker/Kubernetes.
 
 ---
